@@ -6,7 +6,7 @@
 
 #include <netdb.h>
 #include <netinet/ip.h> // for struct iphdr
-#include <netinet/tcp.h> // for struct tcphdr
+#include <netinet/tcp.h> // for struct tcphdr427	
 #include <netinet/udp.h> // for struct udphdr
 #include <netinet/ip_icmp.h> // for struct icmphdr
 #include <netinet/if_ether.h> // for struct ether_header
@@ -57,6 +57,14 @@ int main() {
     if (handle == NULL) {
     fprintf(stderr, "Couldn't open device %s: %s\n", dev, errbuf);
     return 1;
+    }
+
+
+    // NOT Enable promiscuous mode
+    if (pcap_set_promisc(handle, 0) != 0) {
+        fprintf(stderr, "Couldn't set promiscuous mode on device %s\n", dev);
+        pcap_close(handle);
+        return 1;
     }
 
     int packet_count = -1;
